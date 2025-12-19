@@ -1,0 +1,59 @@
+<div class="flex min-h-screen flex-col bg-[#f5f7fb] text-[#1f2933] font-[system-ui]">
+
+  <header
+    class="z-10 flex items-center justify-between
+           px-6 py-3
+           bg-gradient-to-r from-blue-700 to-blue-600
+           text-white
+           shadow-[0_2px_6px_rgba(15,23,42,0.3)]"
+  >
+    <div class="flex items-center gap-3">
+      <span
+        class="inline-flex h-8 w-8 items-center justify-center
+               rounded-xl
+               bg-[rgba(15,23,42,0.4)]
+               text-[12px] font-bold"
+      >
+        EMP
+      </span>
+
+      <span class="text-[1.1rem] font-semibold tracking-wide">
+        Employee Portal
+      </span>
+    </div>
+
+    <div class="text-sm opacity-90">
+      <span>Welcome</span>
+    </div>
+  </header>
+
+  <div class="flex flex-1 min-h-0 max-md:flex-col">
+    <nav
+      class="flex w-[150px] flex-col gap-1
+             bg-white text-gray-200
+             px-3 py-5
+             shadow-[1px_0_3px_rgba(209,213,219,0.4)]
+             max-md:w-full max-md:flex-row max-md:overflow-x-auto"
+    >
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-gradient-to-r from-blue-600 to-indigo-600 opacity-100"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="block whitespace-nowrap
+               rounded-lg
+               px-4 py-2.5
+               text-[0.95rem] font-medium
+               opacity-80
+               transition
+               hover:bg-slate-800 hover:opacity-100 hover:translate-x-[1px]"
+      >
+        Dashboard
+      </a>
+    </nav>
+
+    <main class="flex-1 overflow-auto px-7 py-6">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+</div>

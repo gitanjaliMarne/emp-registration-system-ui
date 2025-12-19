@@ -1,0 +1,176 @@
+<section class="flex flex-col gap-5">
+
+  <div class="flex flex-col gap-4
+           md:flex-row md:items-end md:justify-between">
+    <div>
+      <h1 class="text-[1.4rem] font-semibold text-gray-900">
+        Dashboard
+      </h1>
+      <p class="text-sm text-gray-500">
+        Employee list
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3 md:justify-end">
+      <input type="text" placeholder="Search by name..."
+        class="min-w-[260px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
+        (input)="searchTerm = $any($event.target).value" />
+
+      <button type="button" (click)="toggleAddForm()" title="Add employee" class="inline-flex items-center gap-1.5
+               rounded-full cursor-pointer 
+               bg-gradient-to-r from-green-600 to-green-500
+               px-4 py-1.5
+               text-sm font-medium text-white
+               shadow-md shadow-green-600/40
+               transition
+               hover:brightness-105 hover:shadow-lg hover:shadow-green-600/50
+               active:translate-y-0
+               hover:-translate-y-[1px]">
+        <span class="inline-flex h-[1.4rem] w-[1.4rem]
+                 items-center justify-center
+                 rounded-full
+                 bg-slate-900/25
+                 text-lg leading-none">
+          +
+        </span>
+
+        <span class="hidden md:inline">
+          Add Employee
+        </span>
+      </button>
+    </div>
+  </div>
+
+  @if (showAddForm) {
+  <form [formGroup]="employeeForm" (ngSubmit)="addEmployee()"
+    class="flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm">
+
+    <div class="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(190px,1fr))]">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-600">Name</label>
+        <input type="text" formControlName="name" class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-600">Email</label>
+        <input type="email" formControlName="email" class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm"
+          [ngClass]="{
+              'border-red-500':
+                employeeForm.get('email')?.dirty &&
+                employeeForm.get('email')?.invalid
+            }" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-600">Role</label>
+        <input type="text" formControlName="role" class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm" />
+      </div>
+    </div>
+
+    <div class="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(190px,1fr))]">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-600">Address</label>
+        <input type="text" formControlName="address" class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1 relative">
+        <label class="text-xs font-medium text-gray-600">
+          Department Name
+        </label>
+
+        <input type="text" [value]="employeeForm.value.department?.name || ''" readonly
+          (click)="showDropdown = !showDropdown"
+          class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm cursor-pointer"
+          placeholder="Select Department" />
+
+        @if (showDropdown) {
+        <div class="absolute top-full mt-1 w-full rounded-lg border bg-white shadow-md z-10">
+          @for (item of departments; track $index) {
+          <div (click)="selectDepartment(item)" class="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer">
+            {{ item.name }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-gray-600">Salary</label>
+        <input type="text" formControlName="salary" class="rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm" />
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <button type="submit" [disabled]="employeeForm.invalid"
+        class="rounded-full cursor-pointer bg-blue-600 px-4 py-1.5 text-sm text-white disabled:opacity-50">
+        Save
+      </button>
+
+      <button type="button" (click)="toggleAddForm()"
+        class="rounded-full cursor-pointer bg-gray-200 px-4 py-1.5 text-sm">
+        Cancel
+      </button>
+    </div>
+  </form>
+  }
+
+  <div class="overflow-hidden
+           rounded-xl bg-white
+           shadow-sm shadow-slate-900/10">
+    <table class="w-full border-collapse text-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Name</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Email</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Address</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Role</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Department Name</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Salary</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-600">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (emp of employees; track $index) {
+        <tr class="even:bg-gray-50">
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.name || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.email || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.address || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.role || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.departmentName || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">{{ emp.salary || "-" }}</td>
+          <td class="border-b border-gray-200 px-3 py-2">
+            <div class="flex gap-2">
+              <button class="rounded-md cursor-pointer bg-blue-500 p-1 text-white hover:bg-blue-600" title="Edit"
+                (click)="editEmployee(emp)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="4 0 20 20"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3z" />
+                </svg>
+              </button>
+
+              <button class="rounded-md cursor-pointer bg-red-500 p-1 text-white hover:bg-red-600" title="Delete"
+                (click)="deleteEmployee(emp.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-6 0V5a2 2 0 012-2h2a2 2 0 012 2v2" />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+
+        @if (employees.length === 0) {
+        <tr>
+          <td colspan="7" class="px-3 py-6 text-center text-gray-500">
+            No employees found
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

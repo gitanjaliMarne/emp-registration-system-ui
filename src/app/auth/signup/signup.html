@@ -1,0 +1,93 @@
+<form 
+  [formGroup]="signupForm" 
+  (ngSubmit)="submit()" 
+  class="max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-xl space-y-5"
+>
+
+  <!-- fullName -->
+  <div class="flex flex-col">
+    <label class="font-semibold mb-1">fullName</label>
+    <input 
+      type="text" 
+      formControlName="fullName"
+      class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition-all"
+      [ngClass]="{
+        'border-red-500': signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid
+      }"
+    />
+    <small 
+      *ngIf="signupForm.get('fullName')?.touched && signupForm.get('fullName')?.invalid"
+      class="text-red-500 text-sm mt-1"
+    >
+      fullName is required.
+    </small>
+  </div>
+
+  <!-- Email -->
+  <div class="flex flex-col">
+    <label class="font-semibold mb-1">Email</label>
+    <input 
+      type="email" 
+      formControlName="email"
+      class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition-all"
+      [ngClass]="{
+        'border-red-500': signupForm.get('email')?.touched && signupForm.get('email')?.invalid
+      }"
+    />
+    
+    <small 
+      *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.errors?.['required']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Email is required.
+    </small>
+
+    <small 
+      *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.errors?.['email']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Enter a valid email.
+    </small>
+  </div>
+
+  <!-- Password -->
+  <div class="flex flex-col">
+    <label class="font-semibold mb-1">Password</label>
+    <input 
+      type="password" 
+      formControlName="password"
+      class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition-all"
+      [ngClass]="{
+        'border-red-500': signupForm.get('password')?.touched && signupForm.get('password')?.invalid
+      }"
+    />
+
+    <small 
+      *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.errors?.['required']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Password is required.
+    </small>
+
+    <small 
+      *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.errors?.['minlength']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Minimum 6 characters.
+    </small>
+  </div>
+
+  <!-- Button -->
+  <button
+    type="submit"
+    class="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg 
+           transition-all hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed"
+    [disabled]="signupForm.invalid"
+  >
+    Sign Up
+  </button>
+
+</form>

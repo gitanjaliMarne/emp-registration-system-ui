@@ -1,0 +1,74 @@
+<form 
+  [formGroup]="loginForm"
+  (ngSubmit)="login()"
+  class="max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-xl space-y-5"
+>
+
+  <!-- Email -->
+   <div class="text-2xl font-bold text-center mb-4">
+    Welcome to Login Page
+   </div>
+  <div class="flex flex-col">
+    <label class="font-semibold mb-1">Email</label>
+
+    <input
+      type="email"
+      formControlName="email"
+      class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      [ngClass]="{
+        'border-red-500': email?.touched && email?.invalid
+      }"
+    />
+
+    <small 
+      *ngIf="email?.touched && email?.errors?.['required']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Email is required.
+    </small>
+
+    <small 
+      *ngIf="email?.touched && email?.errors?.['email']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Enter a valid email.
+    </small>
+  </div>
+
+  <!-- Password -->
+  <div class="flex flex-col">
+    <label class="font-semibold mb-1">Password</label>
+
+    <input
+      type="password"
+      formControlName="password"
+      class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+      [ngClass]="{
+        'border-red-500': password?.touched && password?.invalid
+      }"
+    />
+
+    <small 
+      *ngIf="password?.touched && password?.errors?.['required']"
+      class="text-red-500 text-sm mt-1"
+    >
+      Password is required.
+    </small>
+  </div>
+
+  <!-- Login Button -->
+  <button
+    type="submit"
+    class="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg transition-all 
+           hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed cursor-pointer"
+    [disabled]="loginForm.invalid"
+  >
+    Login
+  </button>
+
+
+  <div class="text-center">
+    <p>Don't have an account? <a href="/signup" class="text-blue-600 hover:text-blue-700">Sign up</a></p>
+  </div>
+
+</form>
