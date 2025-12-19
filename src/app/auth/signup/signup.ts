@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -15,15 +15,29 @@ export class Signup {
   signupForm;
 
   constructor(
-    private fb: FormBuilder,
-    private auth: Auth,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly auth: Auth,
+    private readonly router: Router
   ) {
     this.signupForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(form: AbstractControl) {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+
+    if (password !== confirmPassword) {
+      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    } else {
+      form.get('confirmPassword')?.setErrors(null);
+    }
+
+    return null;
   }
 
   submit() {
@@ -32,7 +46,8 @@ export class Signup {
     const signupForm = {
       email: this.signupForm.get('email')?.value,
       fullName: this.signupForm.get('fullName')?.value,
-      password: this.signupForm.get('password')?.value
+      password: this.signupForm.get('password')?.value,
+      confirmPassword: this.signupForm.get('confirmPassword')?.value
     };
 
     this.auth.signup(signupForm).subscribe({
